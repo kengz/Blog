@@ -10,7 +10,7 @@ In any substantial software engineering project these trifecta of CI \(continuou
 2. test
 3. code quality/test coverage
 
-For long I have always used [CircleCI](https://circleci.com/) to do CI for my projects. It has served me well, but it wasn't always perfect. Since Github Actions officially came out I've been wanting to try it, and this weekend I finally did, and I immediately migrated to Github Actions with minimal effort.
+For long I have always used [CircleCI](https://circleci.com/) to do CI for my projects. It has served me well, but it wasn't always perfect. Ever since Github Actions officially came out I've been wanting to try it; this weekend I finally did, and I immediately migrated to Github Actions with minimal effort.
 
 ## The pain points of CircleCI
 
