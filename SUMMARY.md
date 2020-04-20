@@ -1,4 +1,10 @@
 # Table of contents
 
-* [Initial page](README.md)
+* [Introduction](README.md)
+
+## Thinking
+
+## Engineering
+
+* [Github Actions for Python Project](engineering/github-actions-for-python-project.md)
 
