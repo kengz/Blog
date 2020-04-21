@@ -95,10 +95,10 @@ jobs:
     - name: Setup Conda dependencies
       uses: goanpeca/setup-miniconda@v1
       with:
-         activate-environment: lab
-         environment-file: environment.yml
-         python-version: 3.7
-         auto-activate-base: false
+        activate-environment: lab
+        environment-file: environment.yml
+        python-version: 3.7
+        auto-activate-base: false
     - name: Conda info
       shell: bash -l {0}  # activate the conda environment
       run: |
