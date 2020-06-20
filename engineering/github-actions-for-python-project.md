@@ -43,16 +43,16 @@ Step 4 is painful because there was not such thing as community-built Actions to
 
 ```yaml
 # a snippet from my old CircleCI file
-      - run:	
-          name: Run Python tests	
-          command: |	
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter	
-            chmod +x ./cc-test-reporter	
-            ./cc-test-reporter before-build	
-            conda activate lab	
-            python setup.py test	
-            ./cc-test-reporter after-build -p ~/SLM-Lab --exit-code $?	
-      - store_test_results:	
+      - run:    
+          name: Run Python tests    
+          command: |    
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter    
+            chmod +x ./cc-test-reporter    
+            ./cc-test-reporter before-build    
+            conda activate lab    
+            python setup.py test    
+            ./cc-test-reporter after-build -p ~/SLM-Lab --exit-code $?    
+      - store_test_results:    
           path: htmlcov
 ```
 
@@ -76,7 +76,7 @@ Now let's get to building the CI pipeline by replicating the 4 steps in the Circ
 
 Step 1 of building and using a custom Docker image with these OS-dependencies is no longer necessary since we can use the Github ubuntu image directly.
 
-So, we can jump directly to step 2 to install the Conda dependencies. There's a community-built [action to setup miniconda](https://github.com/goanpeca/setup-miniconda) that you can use immediately. Now my Github Actions CI file looks like this: 
+So, we can jump directly to step 2 to install the Conda dependencies. There's a community-built [action to setup miniconda](https://github.com/goanpeca/setup-miniconda) that you can use immediately. Now my Github Actions CI file looks like this:
 
 ```yaml
 name: CI
