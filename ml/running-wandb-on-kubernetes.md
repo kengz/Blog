@@ -87,7 +87,7 @@ Note that k8s containers cannot yet request fractional GPU. This means that we m
 
 To deploy this, simply run:
 
-```yaml
+```bash
 kubectl apply -f sweep-job.yaml
 ```
 
