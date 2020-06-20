@@ -10,8 +10,6 @@ However, there's actually a very easy way to do it - that is to use a **Ubuntu S
 
 In fact, this can all be done quickly and easily and I've set up GPU servers numerous times, so here's the guide:
 
->
-
 Estimated time: &lt; 1 hour
 
 1. Download the “alternative” **Ubuntu Server** image from Ubuntu: [Alternative downloads \| Ubuntu](https://ubuntu.com/download/alternative-downloads).
@@ -19,7 +17,7 @@ Estimated time: &lt; 1 hour
 3. Go to BIOS, disable `secure boot`. Then boot UEFI. Install Ubuntu, overwrite full partition, add SSH Server. Finish installation and login.
 4. You can now `ssh` in with password. Login and install nvidia driver. Since secure boot is disable, nvidia installation should go smoothly.
 
-```text
+```bash
 # if you install ubuntu server no GUI, ok
 sudo add-apt-repository ppa:graphics-drivers
 sudo apt-get update
@@ -49,7 +47,7 @@ sudo systemctl restart docker
 
 1. [Configure WiFi Connections \| NetworkManager documentation](https://docs.ubuntu.com/core/en/stacks/network/network-manager/docs/configure-wifi-connections).
 
-```text
+```bash
 # if you have wifi
 sudo apt-get install network-manager
 sudo /etc/init.d/network-manager restart
@@ -61,7 +59,7 @@ nmcli d wifi connect my_wifi password <password>
 
 1. setup ssh keys, authorized keys, sshd\_config:
 
-```text
+```bash
 ssh-keygen
 nano ~/.ssh/authorized_keys
 chmod 400 ~/.ssh/authorized_keys
@@ -72,7 +70,7 @@ sudo systemctl restart sshd
 
 1. [install zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#ubuntu-debian--derivatives-windows-10-wsl--native-linux-kernel-with-windows-10-build-1903) and change shell \(optional\):
 
-```text
+```bash
 sudo apt install zsh
 chsh -s $(which zsh)
 # then restore your dotfiles from git
@@ -80,7 +78,7 @@ chsh -s $(which zsh)
 
 1. Install libraries \(optional\):
 
-```text
+```bash
 # xvfb, roboschool, orca dependencies
 sudo apt-get install xvfb libpcre16-3 libgtk2.0-0 libxss1 libgconf2-4 libnss3
 # install glances
@@ -89,7 +87,7 @@ curl -L https://bit.ly/glances | /bin/bash
 
 1. Reboot:
 
-```text
+```bash
 sudo reboot now
 ```
 

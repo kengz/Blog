@@ -84,7 +84,7 @@ Our private registry will run on the main. When setting up the k8s main node:
 
 Installs a self-hosted private Kubernetes.
 
-> NOTE: Beware of version compatibility between Kubeflow and Kubernetes.
+> NOTE: I use the zsh kubectl shortcuts below, e.g. `k, kaf, keti`
 
 * [install Kubernetes with kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/). Then install a [local-path volume provisioner](https://github.com/rancher/local-path-provisioner#deployment), and the StorageClass shall be `local-path`.
 
