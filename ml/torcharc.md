@@ -8,7 +8,7 @@ Building modular PyTorch models for my projects in the past years has prompted m
 
 The project is known as [TorchArc](https://github.com/kengz/torcharc): Build PyTorch networks by specifying architectures. You can install it from pip:
 
-```text
+```bash
 pip install torcharc
 ```
 
