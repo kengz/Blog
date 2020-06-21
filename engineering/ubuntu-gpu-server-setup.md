@@ -45,7 +45,7 @@ sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
 ```
 
-1. [Configure WiFi Connections \| NetworkManager documentation](https://docs.ubuntu.com/core/en/stacks/network/network-manager/docs/configure-wifi-connections).
+5. [Configure WiFi Connections \| NetworkManager documentation](https://docs.ubuntu.com/core/en/stacks/network/network-manager/docs/configure-wifi-connections).
 
 ```bash
 # if you have wifi
@@ -57,7 +57,7 @@ nmcli d wifi list
 nmcli d wifi connect my_wifi password <password>
 ```
 
-1. setup ssh keys, authorized keys, sshd\_config:
+6. setup ssh keys, authorized keys, sshd\_config:
 
 ```bash
 ssh-keygen
@@ -68,7 +68,7 @@ sudo nano /etc/ssh/sshd_config
 sudo systemctl restart sshd
 ```
 
-1. [install zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#ubuntu-debian--derivatives-windows-10-wsl--native-linux-kernel-with-windows-10-build-1903) and change shell \(optional\):
+7. [install zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#ubuntu-debian--derivatives-windows-10-wsl--native-linux-kernel-with-windows-10-build-1903) and change shell \(optional\):
 
 ```bash
 sudo apt install zsh
@@ -76,7 +76,7 @@ chsh -s $(which zsh)
 # then restore your dotfiles from git
 ```
 
-1. Install libraries \(optional\):
+8. Install libraries \(optional\):
 
 ```bash
 # xvfb, roboschool, orca dependencies
@@ -85,7 +85,7 @@ sudo apt-get install xvfb libpcre16-3 libgtk2.0-0 libxss1 libgconf2-4 libnss3
 curl -L https://bit.ly/glances | /bin/bash
 ```
 
-1. Reboot:
+9. Reboot:
 
 ```bash
 sudo reboot now
