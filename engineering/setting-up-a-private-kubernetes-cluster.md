@@ -130,12 +130,14 @@ Installs a self-hosted private Kubernetes.
   ```bash
   # on master node
   sudo bash bin/make_kube_config.sh sa default
+  # copy this content for ~/.kube/config below
+  cat /tmp/kube/sa-conf
 
   # on user local
   # backup your old config
   cp ~/.kube/config ~/.kube/config_backup
-  # cat and paste the content of the config into ~/.kube/config
-  cat /tmp/kube/sa-conf
+  # paste the content above into ~/.kube/config
+  nano ~/.kube/config
   # check nodes
   k get nodes
   ```
