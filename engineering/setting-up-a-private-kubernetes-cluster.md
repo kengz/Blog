@@ -102,15 +102,13 @@ Installs a self-hosted private Kubernetes.
 
 * the `kubeadm init` step will output a command for nodes to join the cluster. You can wait until the registry is set up below to join to ensure the registry in on your main.
 * Kubernetes should auto-restart when host machine restarts. If not, check the status and possibly turn off the swap.
+* ```bash
+  # check the status
+  systemctl status kubelet
 
-```bash
-# check the status
-systemctl status kubelet
-
-# you may get error like: failed to run Kubelet: Running with swap on is not supported
-sudo swapoff -a
-```
-
+  # you may get error like: failed to run Kubelet: Running with swap on is not supported
+  sudo swapoff -a
+  ```
 * install a [private Docker registry from Helm](https://github.com/helm/charts/tree/master/stable/docker-registry).
 
   ```bash
