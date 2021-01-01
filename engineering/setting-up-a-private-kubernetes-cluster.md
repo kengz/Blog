@@ -109,13 +109,13 @@ Installs a self-hosted private Kubernetes.
   # you may get error like: failed to run Kubelet: Running with swap on is not supported
   sudo swapoff -a
   ```
-* install a [private Docker registry from Helm](https://github.com/helm/charts/tree/master/stable/docker-registry).
+* install a [private Docker registry from Helm Hub](https://github.com/helm/charts/tree/master/stable/docker-registry).
 
   ```bash
-  helm repo add stable https://charts.helm.sh/stable
+  helm repo add twuni https://helm.twun.io
 
   k create namespace docker
-  helm install private stable/docker-registry --set persistence.enabled=true,persistence.storageClass=local-path,service.clusterIP=10.96.10.96 -n docker
+  helm install private twuni/docker-registry --set persistence.enabled=true,persistence.storageClass=local-path,service.clusterIP=10.96.10.96 -n docker
   ```
 
 * install the NVIDIA device plugin on your cluster:
