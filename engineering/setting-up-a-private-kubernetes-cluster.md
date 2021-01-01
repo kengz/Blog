@@ -112,7 +112,7 @@ Installs a self-hosted private Kubernetes.
 * install a [private Docker registry from Helm](https://github.com/helm/charts/tree/master/stable/docker-registry).
 
   ```bash
-  helm repo add stable https://kubernetes-charts.storage.googleapis.com
+  helm repo add stable https://charts.helm.sh/stable
 
   k create namespace docker
   helm install private stable/docker-registry --set persistence.enabled=true,persistence.storageClass=local-path,service.clusterIP=10.96.10.96 -n docker
