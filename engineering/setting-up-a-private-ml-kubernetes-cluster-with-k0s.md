@@ -2,7 +2,7 @@
 description: 2021/07/05
 ---
 
-# Setting up a private ML Kubernetes cluster with K0s
+# Setting up a private GPU Kubernetes cluster with K0s
 
 In this guide, we will use [k0s](https://k0sproject.io) to set up a private multi-node GPU Kubernetes cluster with private Docker registry for ML applications.
 
