@@ -6,6 +6,7 @@
 
 * [Running WandB on Kubernetes](ml/running-wandb-on-kubernetes.md)
 * [TorchArc](ml/torcharc.md)
+* [Distributed Training with TorchElastic on Kubernetes](ml/distributed-training-with-torchelastic-on-kubernetes.md)
 
 ## Engineering
 
