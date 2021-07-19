@@ -6,7 +6,7 @@ description: 2021/07/18
 
 Distributed training is useful for speeding up training of a model with large dataset by utilizing multiple nodes \(computers\). In the past few years, the technical difficulty of doing distributed training has lowered drastically that it is no longer reserved just for engineers working at a large AI institution.
 
-As a quick glance, distributed training involves multiple nodes running a training. The nodes are assigned ranks from 0 to N, with 0 being the master. Typically:
+At a quick glance, distributed training involves multiple nodes running a training. The nodes are assigned ranks from 0 to N, with 0 being the master. Typically:
 
 * all nodes have a copy of the model
 * each node will sample a partition of the full dataset \(e.g. by sampling data with `index % num_nodes == node_rank`\) to train its model copy
@@ -16,7 +16,7 @@ Let's look at one way of doing this simply using 3 components:
 
 * [PyTorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning): handles all the engineering code such as device placement, so that there's little to no changes to the model code.
 * [TorchElastic](https://pytorch.org/docs/stable/distributed.elastic.html): handles the distributed communication/interface in a fault-tolerant manner.
-* [Kubernetes](https://kubernetes.io): compute cluster with multiple nodes \([see this guide](../engineering/setting-up-a-private-ml-kubernetes-cluster-with-k0s.md) to set up your own Kubernetes cluster\)
+* [Kubernetes](https://kubernetes.io): compute cluster with multiple nodes \([see this guide](../engineering/setting-up-a-private-ml-kubernetes-cluster-with-k0s.md) to set up your own Kubernetes cluster\).
 
 ## PyTorch Lightning
 
@@ -32,7 +32,7 @@ Suppose you already have a model written as a LightningModule that is not distri
 
   to prevent conflicts, e.g.`self.log('train/loss', loss, sync_dist=self.is_dist)`
 
-* likewise, ensure that any process that should be run once \(such as uploading artifacts/model file\) is called only on the master node by checking `os.environ('RANK', '0') == '0'`. The RANK environment variable will be set by TorchElastic when it runs.
+* likewise, ensure that any processes that should be run once \(such as uploading artifacts/model file\) is called only on the master node by checking `os.environ('RANK', '0') == '0'`. The RANK environment variable will be set by TorchElastic when it runs.
 * for more comprehensive tips on updating your LightningModule to support distributed training, check out [this page](https://pytorch-lightning.readthedocs.io/en/latest/advanced/multi_gpu.html).
 
 Next, test your changes by [simulating distributed training on a single node](https://pytorch-lightning.readthedocs.io/en/latest/common/trainer.html#num-processes):
@@ -48,7 +48,7 @@ If you're using `PyTorch >= 1.9.0`, [TorchElastic is already included](https://p
 
 TorchElastic works by using an [etcd](https://etcd.io) server for communication, so:
 
-* in your Conda environment, you'll need to also install `python-etcd`.
+* in your Conda environment, install `python-etcd`.
 * in your Dockerfile, install etcd to system. Use [this script](https://github.com/pytorch/elastic/blob/master/examples/bin/install_etcd).
 
 PyTorchLightning works nicely with TorchElastic, so that's all.
@@ -59,11 +59,11 @@ No matter if you use a vendor or [set up your own](../engineering/setting-up-a-p
 
 * spawn a etcd server on Kubernetes
 * spawn multiple pods, each with a container that maximizes the amount of compute resources available on a node
-* run the torchelastic command on each container
+* run the torchelastic command on each container with the etcd parameters
 
 The logic for spawning pods - managing them elastically, inserting the right arguments such as RANK/WORLD\_SIZE, can be tricky. Luckily, TorchElastic has a ElasticJob Controller that can be installed on your cluster as Custom Resource Definition \(CRD\) to manage these pods elastically.
 
-[Install these CRDs](https://github.com/pytorch/elastic/tree/master/kubernetes#install-elasticjob-controller-and-crd) - you will need a cluster admin role to do so. By default this will create a elastic-job namespace to run the training in, but [you can customize it by modyfying the config](https://github.com/pytorch/elastic/blob/master/kubernetes/config/default/kustomization.yaml#L2).
+[Install the TorchElastic CRDs](https://github.com/pytorch/elastic/tree/master/kubernetes#install-elasticjob-controller-and-crd) - you will need cluster admin role to do so. By default this will create a elastic-job namespace to run the training in, but [you can customize it by modifying the config](https://github.com/pytorch/elastic/blob/master/kubernetes/config/default/kustomization.yaml#L2).
 
 ### Dockerfile
 
@@ -82,16 +82,16 @@ CMD ["--help"]
 
 We only need 2 Kubernetes manifest files - for etcd, and elasticjob.
 
-Note that each etcd server is only served for running one distributed training session; suppose multiple engineers want to run different models with distributed training on the same cluster, they each need to spawn their own instance with a new pair of etcd server and elasticjob without conflict.
+Note that each etcd server is only reserved for running one distributed training session; suppose multiple engineers want to run different models with distributed training on the same cluster, they each need to spawn their own instance with a new pair of etcd server and elasticjob without conflict.
 
-Here are the example manifest files modified from [their original examples](https://github.com/pytorch/elastic/tree/master/kubernetes/config/samples) to run simultaneously without conflict. Replace the example "MY-MODEL-1" with a different name for each instance.
+Here are the example manifest files modified from [the original TorchElastic examples](https://github.com/pytorch/elastic/tree/master/kubernetes/config/samples) to run simultaneously without conflict. Replace the example "MY-MODEL" with a different name for each instance.
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
   namespace: elastic-job
-  name: MY-MODEL-1-etcd-service
+  name: MY-MODEL-etcd-service
 spec:
   ports:
     - name: etcd-client-port
@@ -99,16 +99,16 @@ spec:
       protocol: TCP
       targetPort: 2379
   selector:
-    app: MY-MODEL-1-etcd
+    app: MY-MODEL-etcd
 
 ---
 apiVersion: v1
 kind: Pod
 metadata:
   namespace: elastic-job
-  name: MY-MODEL-1-etcd
+  name: MY-MODEL-etcd
   labels:
-    app: MY-MODEL-1-etcd
+    app: MY-MODEL-etcd
 spec:
   containers:
     - name: etcd
@@ -139,9 +139,9 @@ apiVersion: elastic.pytorch.org/v1alpha1
 kind: ElasticJob
 metadata:
   namespace: elastic-job
-  name: MY-MODEL-1
+  name: MY-MODEL
 spec:
-  rdzvEndpoint: MY-MODEL-1-etcd-service:2379
+  rdzvEndpoint: MY-MODEL-etcd-service:2379
   minReplicas: 1
   maxReplicas: 2
   replicaSpecs:
@@ -175,7 +175,9 @@ spec:
               medium: Memory
 ```
 
-You can also parametrize these manifest files with [Helm](https://helm.sh).
+Then apply these manifest files and you'll have distributed training running, with the ElasticJob Controller managing pods elastically to ensure uptime.
+
+You can also parametrize these manifest files with [Helm](https://helm.sh) to create multiple distributed training instances.
 
 ## Tying it all together
 
