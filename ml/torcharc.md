@@ -365,10 +365,8 @@ model = torcharc.build(arc)
 
 batch_size = 16
 dag_in_shape = arc['dag_in_shape']
-data = {'image': torch.rand([batch_size, *dag_in_shape['image']]), 'vector': torch.rand([batch_size, *dag_in_shape['vector']])}
-# convert from a dict of Tensors into a TensorTuple - a namedtuple
-xs = torcharc.to_namedtuple(data)
-# returns TensorTuple if output is multi-model, Tensor otherwise
+xs = {'image': torch.rand([batch_size, *dag_in_shape['image']]), 'vector': torch.rand([batch_size, *dag_in_shape['vector']])}
+# returns dict of Tensors if output is multi-modal, Tensor otherwise
 ys = model(xs)
 ```
 {% endtab %}
@@ -410,9 +408,9 @@ DAGNet(
 {% endtab %}
 {% endtabs %}
 
-The DAG module accepts a `TensorTuple` \(example below\) as input, and the module selects its input by matching its own name in the arc and the `in_name`, then carry forward the output together with any unconsumed inputs.
+The DAG module accepts a `dict` \(example below\) as input, and the module selects its input by matching its own name in the arc and the `in_name`, then carry forward the output together with any unconsumed inputs.
 
-For example, the input `xs` with keys `image, vector` passes through the first `image` module, and the output becomes `TensorTuple(image=image_module(xs.image), vector=xs.vector)`. This is then passed through the remainder of the modules in the arc as declared.
+For example, the input `xs` with keys `image, vector` passes through the first `image` module, and the output becomes `{'image': image_module(xs.image), 'vector': xs.vector}`. This is then passed through the remainder of the modules in the arc as declared.
 
 
 
